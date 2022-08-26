@@ -1,0 +1,29 @@
+version: '3.7'
+
+services:
+  django_gunicorn:
+    volumes:
+      - static:/static
+    env_file:
+      - .env
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    environment:
+      SUPER_USER_PASSWORD: 'pico'
+      SUPER_USER_NAME: 'pico'
+      SUPER_USER_EMAIL: 'pico@pico.com'
+      SECRET_KEY: '3putabunchofnonsenseheretomakeitsecure'
+  nginx:
+    build: ./nginx
+    volumes:
+      - static:/static
+    ports:
+      - "80:80"
+    depends_on:
+      - django_gunicorn
+
+volumes:
+  static:
+
